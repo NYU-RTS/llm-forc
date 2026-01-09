@@ -90,7 +90,7 @@ align: l-lt-lt
 color: violet-light
 ---
 
-[^ref1]: <div class="ns-c-cite">[Attention Is All You Need](https://arxiv.org/abs/1706.03762)</div>
+[^ref1]: <div class="ns-c-cite"><a href="https://arxiv.org/abs/1706.03762">Attention Is All You Need</a></div>
 [^ref2]: <div class="ns-c-cite">Adapted from Hands-On Large Language Models by Jay Alammar & Maarten Grootendorst.</div>
 
 
@@ -197,25 +197,6 @@ color: violet-light
 LLMs generate output one token at a time[^ref1]
 
 ---
-layout: side-title
-side: l
-color: violet-light
-titlewidth: is-4
-align: rm-lm
----
-
-:: title ::
-
-# Hands-on
-
-# <mdi-arrow-right />
-
-:: content ::
-
-Head over to app.portkey.ai and choose the "Login with SSO" option with your NetID@nyu.edu email address.
-
-
----
 layout: top-title-two-cols
 columns: is-6
 color: violet-light
@@ -228,10 +209,13 @@ color: violet-light
 
 :: left ::
 - LLMs are programmatically accessible via an HTTP server, typically via the OpenAI API
-- To invoke the LLM, you send an HTTP request with
-    - your `API_KEY`
-    - message body, i.e. prompt and any conversation history
-    - parameters like maximum tokens, temperature, thinking/reasoning level, etc.
+- To invoke the LLM, you send an HTTP request with:
+    <div class="ns-c-tight">
+    - your `API_KEY` <br/>
+    - message body, i.e. prompt and any conversation history <br/>
+    - model to invoke <br/> 
+    - parameters like maximum tokens, temperature, thinking/reasoning level, etc. <br/>
+    </div>
 
 :: right ::
 
@@ -243,7 +227,7 @@ sequenceDiagram
     U->>Server: POST /v1/chat/completions <br/> Headers: Authorization (API_KEY)<br/>Body: messages, model, parameters
     activate Server
     Note over Server: LLM inference  <br/> generates a response
-    Server-->>U: JSON response contains:<br/>- choices []<br/>- usage stats<br/>- metadata
+    Server-->>U: JSON response contains:<br/>- choices<br/>- usage stats<br/>- metadata
     deactivate Server
 
 ```
@@ -270,16 +254,25 @@ curl -X POST "https://ai-gateway.apps.cloud.rt.nyu.edu/v1/chat/completions " \
   -H "Content-Type: application/json" \
   -d '{
     "model":"@vertexai/gemini-2.5-flash-lite", 
-    "messages": [
-      {"role": "system", "content": "You are a helpful assistant." },
-      { "role": "user", "content": "Explain quantum computing in simple terms"}],
-    "max_tokens":"128"
+    "messages": 
+    [
+      {
+        "role": "system", 
+        "content": "You are a helpful assistant." 
+      },
+      {
+        "role": "user",
+        "content": "Explain quantum computing in simple terms"
+      }
+    ],
+    "max_tokens":"64"
     "temperature": 0.7
   }'
 ```
  </template>
   <template #2>
-Response Structure
+
+  Response
 
 ```json 
 {
@@ -287,29 +280,121 @@ Response Structure
   "object":"chat.completion",
   "model":"gemini-2.5-flash-lite",
   "provider":"vertex-ai",
-  "choices":[
-    {"message": 
-    {"role":"assistant",
-    "content":"Imagine a regular computer uses bits, which are like light switches that can be either ON (1) or OFF (0). 
-    This is how it stores and processes information.\n\n**Quantum computing is like a super-powered, mind-bending 
-    version of this.** Instead of just ON or OFF, a quantum computer uses **qubits**.\n\nHere's where it gets weird and wonderful:\n\n* 
-    **Superposition: The \"Both ON and OFF\" Trick**\n    A qubit can be ON, OFF, or **both ON and OFF at the same time**
-    . Think of it like a spinning coin. Until it lands, it"},
-    "index":0,
-    "finish_reason":"length"}],
-  "usage":
-  {
-    "prompt_tokens":12,
-    "completion_tokens":128,
-    "total_tokens":140, 
+  "choices":
+  [
+    {"message":
+      {"role":"assistant",
+        "content":"Imagine a regular computer uses bits, which are like light switches that can be either ON (1) or 
+        OFF (0). Quantum computers use **qubits**.\n\nHere's where it gets weird and wonderful:\n\n* 
+        **Qubits can be ON, OFF, or BOTH at the same time.** This"},
+      "index":0,
+      "finish_reason":"length"}
+  ],
+  "usage":{
+    "prompt_tokens":12, "completion_tokens":64, "total_tokens":76,
     "completion_tokens_details":{"reasoning_tokens":0}
-  }    
+    }
 }
 ```
 
  </template>
 </v-switch>
 
+
+---
+layout: top-title-two-cols
+columns: is-4
+color: violet-light
+---
+
+:: title ::
+
+# LLM gateway
+
+:: left :: 
+- API access to LLMs for research workflows is facilitated by an LLM gateway (Portkey) at NYU.
+- Beyond providing a unified interface for all LLMs, it:
+    <div class="ns-c-tight">
+    - has a UI for prototyping <br/>
+    - prompt library to version and template your prompts <br/>
+    - allows you to view the logs for each request <br/>
+    - lets you perform batch processing <br/>
+    </div>
+- We will be exploring it in the hands on session now.
+
+:: right ::
+
+<img src="/portkey_overview.png"/>
+
+
+---
+layout: side-title
+side: l
+color: violet-light
+titlewidth: is-4
+align: rm-lm
+---
+
+:: title ::
+
+# Hands on
+
+# <mdi-arrow-right />
+
+:: content ::
+
+Head over to app.portkey.ai and choose the "Login with SSO" option with your NetID@nyu.edu email address.
+
+
+---
+layout: top-title-two-cols
+columns: is-8
+color: violet-light
+---
+
+:: title ::
+
+# Creating an API Key
+
+:: left :: 
+
+<img src="/portkey_workspace.png"/>
+
+<br/>
+User vs Service Keys: logs with user key will have the NetID of the user as part of the metadata while the services will not. 
+
+Stick to user keys unless you're developing a service.
+
+:: right ::
+
+<img src="/portkey_key_create.png"/>
+
+
+---
+layout: top-title-two-cols
+columns: is-3
+color: violet-light
+---
+
+:: title ::
+
+# Prompt Playground
+
+:: left :: 
+- Explore the effect of parameters
+- Run the same prompt across various models
+- Create prompt templates with dynamic variables
+- Enable tool calling (we will discuss this in depth soon)
+
+:: right ::
+<v-switch>
+  <template #1>
+  <img src="/prompt_playground.png"/>
+  </template>
+  <template #2>
+    <img src="/prompt_playground_compare.png"/>
+  </template>
+</v-switch>
 
 
 ---
