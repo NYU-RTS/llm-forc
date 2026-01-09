@@ -26,21 +26,18 @@ jobs:
     steps:
       - uses: actions/checkout@v6
 
-      - uses: actions/setup-node@v6
+      - uses: oven-sh/setup-bun@v2
         with:
-          node-version: 'lts/*'
-
-      - name: Setup @antfu/ni
-        run: npm i -g @antfu/ni
+          bun-version: latest
 
       - name: Install dependencies
-        run: nci
+        run: bun install
 
       - name: Install Playwright Browsers
-        run: npm exec playwright install --with-deps
+        run: bun x playwright install --with-deps
 
       - name: Build
-        run: nr build --base /${{github.event.repository.name}}/
+        run: bun run build --base /${{github.event.repository.name}}/
                
       - name: Setup Pages
         uses: actions/configure-pages@v5
