@@ -30,6 +30,27 @@ jobs:
         with:
           bun-version: latest
 
+      # Cache bun dependencies
+      - name: Cache bun dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            presentation/node_modules
+            ~/.bun/install/cache
+          key: bun-${{ hashFiles('presentation/bun.lock') }}
+          restore-keys: |
+            bun-
+
+      # Cache Playwright browsers
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/ms-playwright
+          key: playwright-${{ hashFiles('presentation/bun.lock') }}
+          restore-keys: |
+            playwright-
+
       - name: Install dependencies
         run: bun install
 
