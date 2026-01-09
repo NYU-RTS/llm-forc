@@ -78,7 +78,7 @@ color: violet-light
 
 
 :: right ::
-<img src="./neural_nets.png"/>
+<img src="/neural_nets.png"/>
 
 Overview of neural networks[^ref1] 
 
@@ -108,7 +108,7 @@ color: violet-light
 
 
 :: right ::
-<img src="./llms_uses.png"/>
+<img src="/llms_uses.png"/>
 
 Applications of LLMs[^ref2]
 
@@ -138,7 +138,7 @@ smaller than words.
 - Special tokens are used to denote things like start/end of sequence, denote the "role" for a sequence, etc.
 
 :: right ::
-<img src="./tiktoenizer.png"/>
+<img src="/tiktoenizer.png"/>
 
 Interactive demo of tokenization, head to [this link](https://tiktokenizer.vercel.app/?model=gpt-4o) and try it out![^ref1] 
 
@@ -165,7 +165,7 @@ color: violet-light
 
 
 :: right ::
-<img src="./one_token_at_a_time.png"/>
+<img src="/one_token_at_a_time.png"/>
 
 LLMs generate output one token at a time[^ref1] 
 
@@ -192,7 +192,7 @@ color: violet-light
 
 
 :: right ::
-<img src="./token_probs.png"/>
+<img src="/token_probs.png"/>
 
 LLMs generate output one token at a time[^ref1]
 
