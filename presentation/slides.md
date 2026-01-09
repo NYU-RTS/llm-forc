@@ -196,6 +196,34 @@ color: violet-light
 
 LLMs generate output one token at a time[^ref1]
 
+
+---
+layout: top-title-two-cols
+columns: is-6
+align: l-lt-lt
+color: violet-light
+---
+
+
+[^ref1]: <div class="ns-c-cite">Adapted from <a href="https://newsletter.maartengrootendorst.com/p/a-visual-guide-to-reasoning-llms">A Visual Guide to Reasoning LLMs by Maarten Grootendorst</a>.</div>
+
+:: title ::
+
+# Reasoning LLMs
+
+:: left ::
+
+- Reasoning LLMs emit "reasoning" tokens before final output tokens
+- Most reasoning models allow you to set reasoning level and budget
+- The visibility of reasoning tokens varies by providers
+- Even though the reasoning tokens might not be visible to you, they are still billed for, occupy the context window and count towards the limit of maximum token usage set by you.
+
+:: right ::
+<img src="/reasoning_llms.png"/>
+
+Reasoning LLMs have been trained to imitate thought processes[^ref1]
+
+
 ---
 layout: top-title-two-cols
 columns: is-6
