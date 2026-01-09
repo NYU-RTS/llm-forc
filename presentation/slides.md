@@ -206,7 +206,7 @@ align: rm-lm
 
 :: title ::
 
-# Hands on
+# Hands-on
 
 # <mdi-arrow-right />
 
@@ -217,85 +217,99 @@ Head over to app.portkey.ai and choose the "Login with SSO" option with your Net
 
 ---
 layout: top-title-two-cols
-columns: is-3-9
+columns: is-6
+color: violet-light
+---
+
+
+:: title ::
+
+# LLM API servers
+
+:: left ::
+- LLMs are programmatically accessible via an HTTP server, typically via the OpenAI API
+- To invoke the LLM, you send an HTTP request with
+    - your `API_KEY`
+    - message body, i.e. prompt and any conversation history
+    - parameters like maximum tokens, temperature, thinking/reasoning level, etc.
+
+:: right ::
+
+```mermaid {scale: 0.75}
+sequenceDiagram
+    actor U as You
+    participant Server as LLM API Server
+
+    U->>Server: POST /v1/chat/completions <br/> Headers: Authorization (API_KEY)<br/>Body: messages, model, parameters
+    activate Server
+    Note over Server: LLM inference  <br/> generates a response
+    Server-->>U: JSON response contains:<br/>- choices []<br/>- usage stats<br/>- metadata
+    deactivate Server
+
+```
+
+
+---
+layout: top-title
 color: violet-light
 ---
 
 :: title ::
 
-# Interacting with LLM APIs using cURL
+# Anatomy of an LLM API call
 
-:: left ::
-
-## API Request Flow
-
-```mermaid {theme: 'dark', scale: 0.5}
-sequenceDiagram
-    participant C as Client (cURL)
-    participant API as LLM API Server
-    participant M as Model
-
-    C->>API: POST /v1/chat/completions
-    Note over C,API: Headers: Authorization, Content-Type
-    Note over C,API: Body: messages, model, parameters
-
-    API->>API: Validate request
-    API->>M: Process prompt
-    M->>M: Generate response
-    M->>API: Return completion
-    API->>C: JSON response
-
-    Note over C: Response contains:<br/>- choices[]<br/>- usage stats<br/>- metadata
-```
-
-:: right ::
-
+:: content ::
 <v-switch>
+  <template #1> 
 
-  <template #1>  
+Example Query
 
-Example cURL Command
-
-```bash {!children:text-xs}
-curl -X POST "https://api.openai.com/v1/chat/completions" \
-  -H "Authorization: Bearer $OPENAI_API_KEY" \
+```bash
+curl -X POST "https://ai-gateway.apps.cloud.rt.nyu.edu/v1/chat/completions " \
+  -H "x-portkey-api-key: $PORTKEY_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
-    "model": "gpt-4",
+    "model":"@vertexai/gemini-2.5-flash-lite", 
     "messages": [
-      {
-        "role": "user",
-        "content": "Explain quantum computing in simple terms"
-      }
-    ],
-    "max_tokens": 150,
+      {"role": "system", "content": "You are a helpful assistant." },
+      { "role": "user", "content": "Explain quantum computing in simple terms"}],
+    "max_tokens":"128"
     "temperature": 0.7
   }'
 ```
-  </template>
-
-
-  <template #2>  
-
+ </template>
+  <template #2>
 Response Structure
 
-```json {!children:text-xs}
+```json 
 {
-  "choices": [{
-    "message": {
-      "role": "assistant",
-      "content": "Quantum computing uses quantum mechanics..."
-    }
-  }],
-  "usage": {
-    "prompt_tokens": 12,
-    "completion_tokens": 150
-  }
+  ...
+  "object":"chat.completion",
+  "model":"gemini-2.5-flash-lite",
+  "provider":"vertex-ai",
+  "choices":[
+    {"message": 
+    {"role":"assistant",
+    "content":"Imagine a regular computer uses bits, which are like light switches that can be either ON (1) or OFF (0). 
+    This is how it stores and processes information.\n\n**Quantum computing is like a super-powered, mind-bending 
+    version of this.** Instead of just ON or OFF, a quantum computer uses **qubits**.\n\nHere's where it gets weird and wonderful:\n\n* 
+    **Superposition: The \"Both ON and OFF\" Trick**\n    A qubit can be ON, OFF, or **both ON and OFF at the same time**
+    . Think of it like a spinning coin. Until it lands, it"},
+    "index":0,
+    "finish_reason":"length"}],
+  "usage":
+  {
+    "prompt_tokens":12,
+    "completion_tokens":128,
+    "total_tokens":140, 
+    "completion_tokens_details":{"reasoning_tokens":0}
+  }    
 }
 ```
-  </template>
 
+ </template>
 </v-switch>
+
 
 
 ---
