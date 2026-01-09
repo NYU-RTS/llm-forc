@@ -384,17 +384,48 @@ color: violet-light
 - Explore the effect of parameters
 - Run the same prompt across various models
 - Create prompt templates with dynamic variables
+- Attach files (PDFs/Images/etc) to prompts
 - Enable tool calling (we will discuss this in depth soon)
 
 :: right ::
 <v-switch>
   <template #1>
-  <img src="/prompt_playground.png"/>
+    <img src="/prompt_playground.png"/>
   </template>
   <template #2>
     <img src="/prompt_playground_compare.png"/>
   </template>
 </v-switch>
+
+---
+layout: top-title-two-cols
+columns: is-7
+color: violet-light
+---
+
+:: title ::
+
+# Observability 
+
+:: left :: 
+- Explore all the parameters set for a query
+- Access the token usage breakdown between reasoning and output
+- View the list of available tools, usage requirement and usage traces
+- API to export logs is available
+
+:: right ::
+<v-switch>
+  <template #1>
+    <img src="/logs_basic.png"/>
+  </template>
+  <template #2>
+    <img src="/logs_tool.png"/>
+  </template>
+  <template #3>
+    <img src="/logs_multi_tool.png"/>
+  </template>
+</v-switch>
+
 
 
 ---
