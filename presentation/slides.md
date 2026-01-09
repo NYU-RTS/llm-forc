@@ -199,7 +199,7 @@ LLMs generate output one token at a time[^ref1]
 ---
 layout: side-title
 side: l
-color: violet
+color: violet-light
 titlewidth: is-4
 align: rm-lm
 ---
@@ -213,6 +213,89 @@ align: rm-lm
 :: content ::
 
 Head over to app.portkey.ai and choose the "Login with SSO" option with your NetID@nyu.edu email address.
+
+
+---
+layout: top-title-two-cols
+columns: is-3-9
+color: violet-light
+---
+
+:: title ::
+
+# Interacting with LLM APIs using cURL
+
+:: left ::
+
+## API Request Flow
+
+```mermaid {theme: 'dark', scale: 0.5}
+sequenceDiagram
+    participant C as Client (cURL)
+    participant API as LLM API Server
+    participant M as Model
+
+    C->>API: POST /v1/chat/completions
+    Note over C,API: Headers: Authorization, Content-Type
+    Note over C,API: Body: messages, model, parameters
+
+    API->>API: Validate request
+    API->>M: Process prompt
+    M->>M: Generate response
+    M->>API: Return completion
+    API->>C: JSON response
+
+    Note over C: Response contains:<br/>- choices[]<br/>- usage stats<br/>- metadata
+```
+
+:: right ::
+
+<v-switch>
+
+  <template #1>  
+
+Example cURL Command
+
+```bash {!children:text-xs}
+curl -X POST "https://api.openai.com/v1/chat/completions" \
+  -H "Authorization: Bearer $OPENAI_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "gpt-4",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Explain quantum computing in simple terms"
+      }
+    ],
+    "max_tokens": 150,
+    "temperature": 0.7
+  }'
+```
+  </template>
+
+
+  <template #2>  
+
+Response Structure
+
+```json {!children:text-xs}
+{
+  "choices": [{
+    "message": {
+      "role": "assistant",
+      "content": "Quantum computing uses quantum mechanics..."
+    }
+  }],
+  "usage": {
+    "prompt_tokens": 12,
+    "completion_tokens": 150
+  }
+}
+```
+  </template>
+
+</v-switch>
 
 
 ---
