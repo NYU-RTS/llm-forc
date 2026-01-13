@@ -59,6 +59,7 @@ layout: top-title-two-cols
 columns: is-5-7
 align: l-lt-lt
 color: violet-light
+hideInToc: true
 ---
 
 
@@ -88,6 +89,7 @@ layout: top-title-two-cols
 columns: is-7-5
 align: l-lt-lt
 color: violet-light
+hideInToc: true
 ---
 
 [^ref1]: <div class="ns-c-cite"><a href="https://arxiv.org/abs/1706.03762">Attention Is All You Need</a></div>
@@ -118,6 +120,7 @@ layout: top-title-two-cols
 columns: is-6
 align: l-lt-lt
 color: violet-light
+hideInToc: true
 ---
 
 
@@ -148,6 +151,7 @@ layout: top-title-two-cols
 columns: is-8
 align: l-lt-lt
 color: violet-light
+hideInToc: true
 ---
 
 
@@ -175,6 +179,7 @@ layout: top-title-two-cols
 columns: is-5
 align: l-lt-lt
 color: violet-light
+hideInToc: true
 ---
 
 
@@ -202,6 +207,7 @@ layout: top-title-two-cols
 columns: is-6
 align: l-lt-lt
 color: violet-light
+hideInToc: true
 ---
 
 
@@ -228,6 +234,7 @@ Reasoning LLMs have been trained to imitate thought processes[^ref1]
 layout: top-title-two-cols
 columns: is-6
 color: violet-light
+hideInToc: true
 ---
 
 
@@ -264,6 +271,7 @@ sequenceDiagram
 ---
 layout: top-title
 color: violet-light
+hideInToc: true
 ---
 
 :: title ::
@@ -331,8 +339,57 @@ curl -X POST "https://ai-gateway.apps.cloud.rt.nyu.edu/v1/chat/completions " \
 
 ---
 layout: top-title-two-cols
+columns: is-6
+color: violet-light
+hideInToc: true
+---
+
+:: title ::
+
+# Message Roles
+
+:: left ::
+
+Each message within the conversation thread has a **role** associated with it.
+
+Head back to the tokenizer playgrond and look for the these special tokens:
+<div class="ns-c-tight">
+
+- `system` <br/>
+- `assistant` <br/>
+- `user` <br/>
+
+</div>
+
+:: right ::
+
+<SpeechBubble position="l" color="cyan-light" textAlign="left" shape="round" maxWidth="400px">
+
+**system:** Affects the tone and shapes the behaviour of the assistant messages
+
+</SpeechBubble>
+<br/>
+
+<SpeechBubble position="l" color="emerald-light" shape="round" maxWidth="400px">
+
+**user:** Messages sent by you to the LLM
+
+</SpeechBubble>
+<br/>
+
+<SpeechBubble position="r" color="violet-light" textAlign="right" shape="round" maxWidth="400px">
+
+**assistant:** Messages by the LLM to you
+
+</SpeechBubble>
+
+
+
+---
+layout: top-title-two-cols
 columns: is-4
 color: violet-light
+hideInToc: true
 ---
 
 :: title ::
@@ -378,6 +435,7 @@ Head over to app.portkey.ai and choose the "Login with SSO" option with your Net
 layout: top-title-two-cols
 columns: is-8
 color: violet-light
+hideInToc: true
 ---
 
 :: title ::
@@ -402,6 +460,7 @@ Stick to user keys unless you're developing a service.
 layout: top-title-two-cols
 columns: is-3
 color: violet-light
+hideInToc: true
 ---
 
 :: title ::
@@ -429,6 +488,7 @@ color: violet-light
 layout: top-title-two-cols
 columns: is-7
 color: violet-light
+hideInToc: true
 ---
 
 :: title ::
@@ -454,6 +514,248 @@ color: violet-light
   </template>
 </v-switch>
 
+---
+layout: top-title-two-cols
+columns: is-6
+color: violet-light
+hideInToc: true
+---
+
+
+:: title ::
+
+# Sending a request in Python
+
+:: left ::
+- We will use the `portkey-ai` package for this using an API key created from the UI and the following `base_url`: `https://ai-gateway.apps.cloud.rt.nyu.edu/v1/` (or to `http://ai-gateway.jhub/v1` if you're using JupyterHub today).
+
+<AdmonitionType type="warning" width="325px">
+
+Whenever you instantiate a `Portkey` client, the `base_url` must be set. If you miss this parameter you would be connecting to the vendor's SaaS platform and NYU provisioned virtual keys will not work.
+
+</AdmonitionType>
+
+:: right ::
+
+```python !children:text-xs
+from portkey_ai import Portkey
+
+portkey = Portkey(
+    base_url="https://ai-gateway.apps.cloud.rt.nyu.edu/v1/",
+    api_key="...",
+)
+
+completion = portkey.chat.completions.create(
+    model="@vertexai/gemini-2.5-flash",
+    messages=[
+        {"role": "system", "content": "You are not a helpful assistant"},
+        {
+            "role": "user",
+            "content": "Complete the following sentence: \
+            The sun is shining and the sky is",
+        },
+    ],
+)
+
+print(completion.choices[0]["message"]["content"])
+```
+
+
+---
+layout: top-title-two-cols
+columns: is-6
+color: violet-light
+hideInToc: true
+---
+
+:: title ::
+
+# Inconsistent response formats
+
+:: left ::
+
+For instance, running the prompt below with various LLMs shows us that the response format is not consistent among them.
+
+
+```python
+prompt = prompt = """
+Extract data from the following text:
+
+<text>
+# Structured Data
+By Carson Sievert
+</text>
+"""
+"""
+```
+
+:: right ::
+  
+  <SpeechBubble position="r" color="cyan-light" textAlign="left" shape="round" maxWidth="475px">
+  
+  **gemini-2.5-flash-lite**
+  ```json
+  [
+    {"data": "Structured Data", "type": "title"},
+    {"data": "Carson Sievert", "type": "author"}
+  ]
+  ```
+  </SpeechBubble>
+  <SpeechBubble position="r" color="fuchsia-light" textAlign="left" shape="round" maxWidth="475px">
+  
+  **gemini-3-pro-preview**
+  ```
+  **Title:** Structured Data
+  **Author:** Carson Sievert
+  ```
+  </SpeechBubble>
+  <SpeechBubble position="r" color="yellow-light" textAlign="left" shape="round" maxWidth="475px">
+  
+  **gpt-5-mini**
+  ```
+  {
+  "title": "Structured Data",
+  "author": "Carson Sievert",
+  "raw": "# Structured Data\nBy Carson Sievert"
+  }
+  ```
+  </SpeechBubble>
+
+---
+layout: top-title-two-cols
+columns: is-6
+color: violet-light
+hideInToc: true
+---
+:: title ::
+
+# Structured outputs
+
+:: left ::
+
+You can specify a response format to ease integration of LLM outputs into your workflows.
+
+```python
+class ArticleSpec(BaseModel):
+    """Information about an article written in markdown"""
+
+    title: str = Field(description="Article title")
+    author: str = Field(description="Name of the author")
+```
+and call the LLM with the response schema passed alongside the prompt:
+```python
+completion = portkey.beta.chat.completions.parse(
+    model="@vertexai/gemini-2.5-flash-lite",
+    messages=[
+        {"role": "user", "content": f"{prompt}"}
+    ],
+    response_format=ArticleSpec,
+)
+print(completion.choices[0].message.content)
+```
+
+:: right ::
+  
+  <SpeechBubble position="r" color="cyan-light" textAlign="left" shape="round" maxWidth="400px">
+  
+  **gemini-2.5-flash-lite**
+  ```
+  {
+    "title": "Structured Data",
+    "author": "Carson Sievert"
+  }
+  ```
+  </SpeechBubble>
+  <SpeechBubble position="r" color="fuchsia-light" textAlign="left" shape="round" maxWidth="400px">
+  
+  **gemini-3-pro-preview**
+  ```
+{
+  "title": "Structured Data",
+  "author": "Carson Sievert"
+}
+  ```
+  </SpeechBubble>
+  <SpeechBubble position="r" color="yellow-light" textAlign="left" shape="round" maxWidth="400px">
+  
+  **gpt-5-mini**
+  ```
+  {
+    "title":"Structured Data",
+    "author":"Carson Sievert"
+  }
+  ```
+  </SpeechBubble>
+
+
+---
+layout: top-title-two-cols
+columns: is-4
+color: violet-light
+hideInToc: true
+---
+:: title ::
+
+# Structured outputs
+
+:: left ::
+
+This does not prevent LLMs from hallucinating. For instance, you can add a date field to the schema and see what happens.
+```python
+class ArticleSpec(BaseModel):
+    """Information about an article written in markdown"""
+
+    title: str = Field(description="Article title")
+    author: str = Field(description="Name of the author")
+    date: str = Field(description="Date written in YYYY-MM-DD format.")
+
+prompt = prompt = """
+  Extract data from the following text:
+
+  <text>
+  # Structured Data
+  By Carson Sievert
+  </text>
+"""
+```
+
+The `date` field is missing in the prompt, put some LLMs hallucinate one.
+
+:: right ::
+  
+  <SpeechBubble position="r" color="cyan-light" textAlign="left" shape="round" maxWidth="400px">
+  
+  **gemini-2.5-flash-lite**
+  ```
+  {
+    "title": "Structured Data",
+    "author": "Carson Sievert",
+    "date": "2023-10-26"
+  }
+  ```
+  </SpeechBubble>
+  <SpeechBubble position="r" color="fuchsia-light" textAlign="left" shape="round" maxWidth="400px">
+  
+  **gemini-3-pro-preview**
+  ```
+{
+  "title": "Structured Data",
+  "author": "Carson Sievert",
+  "date": "null"
+}
+  ```
+  </SpeechBubble>
+  <SpeechBubble position="r" color="yellow-light" textAlign="left" shape="round" maxWidth="400px">
+  
+  **gpt-5-mini**
+  ```
+  {
+    "title":"Structured Data",
+    "author":"Carson Sievert",
+    "date":""
+  }
+  ```
+  </SpeechBubble>
 
 
 ---
