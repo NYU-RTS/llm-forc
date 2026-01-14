@@ -762,7 +762,7 @@ What happens if you set that field to be either a `str` or `None`?
 
 ---
 layout: top-title-two-cols
-columns: is-6
+columns: is-7
 color: violet-light
 hideInToc: true
 ---
@@ -781,13 +781,16 @@ hideInToc: true
 
 - We can pass function/tool definitions to an LLM and let it decide if it needs to be called (or require it to be used).
 
-- There are some tools that 
+- There are some tools like web search that are offered by LLM providers as "built-in" tools that users do not have to implement. Here is the `google search` tool that can be used with `gemini` models 
 
+```json
+    {"type": "function", "function": {"name": "google_search"}}
+```
 
 :: right ::
 
 <div style="text-align: center;">
-  <img src="/tool-call.png" style="width: 50%;"/>
+  <img src="/tool-call.png" style="width: 64%;"/>
 </div>
 
 Tool call schematic [^ref1]
