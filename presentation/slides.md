@@ -771,7 +771,7 @@ hideInToc: true
 
 :: title ::
 
-# Tools
+# Function calling
 
 :: left :: 
 
@@ -795,6 +795,150 @@ hideInToc: true
 
 Tool call schematic [^ref1]
 
+
+---
+layout: top-title
+color: violet-light
+hideInToc: true
+---
+
+:: title ::
+
+# Die Roll tool
+
+:: content ::
+
+<v-switch>
+  <template #1>
+
+  Define the tool implementation and its specification
+
+  ```python
+def roll_dice(N: int) -> int:
+    """Roll an N sided die"""
+    return random.randint(1,N)
+
+tools = [
+    {
+        "type": "function",
+        "function": {
+            "name": "roll_dice",
+            "description": "Roll the special N sided dice and return the result",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "num_sides": {
+                        "type": "integer",
+                        "description": "Number of sides for the die to roll"
+                    }
+                },
+                "required": ["num_sides"]
+            }
+        }
+    }
+]
+
+  ```
+  </template>
+  
+  <template #2>
+
+  Pass a prompt to the LLM with this tool:
+  ```python
+  messages = [
+        {"role": "user", "content": "Roll a 10 sided die and check if the dice roll was valid. Explain your reasoning."}
+]
+completion = portkey.chat.completions.create(
+    model="@vertexai/gemini-3-flash-preview",
+    messages=messages,
+    tools=tools,
+)
+print(completion.choices[0].message)
+  ```
+  </template>
+
+  <template #3>
+  View the response which contains a request to execute the tool:
+
+  ```python
+  {
+    "content": null,
+    "role": "assistant",
+    "function_call": null,
+    "tool_calls": [
+        {
+            "id": "call_eNsEVG9AB0RbfhGgfqYrxAXq",
+            "function": {
+                "arguments": "{\"num_sides\":10}",
+                "name": "roll_dice",
+                "thought_signature": "..."
+            },
+            "type": "function"
+        }
+    ],
+    "refusal": null,
+    "audio": null
+}
+```
+
+  </template>
+
+  <template #4>
+  Execute the `roll_dice` function locally and send the result back to the LLM:
+  
+  ```python
+  [
+    {
+      'role': 'user',
+      'content': 'Roll a 10 sided die and check if the dice roll was valid. Explain your reasoning.'
+    },
+    ChatCompletionMessage(
+      content=None,
+      role='assistant', 
+      function_call=None, 
+      tool_calls=[ChatCompletionMessageToolCall(id='call_KdOp1EK1woIDbFoiXv4HaZBP', 
+      function=FunctionCall(arguments='{"num_sides":10}',
+       name='roll_dice', thought_signature='...'), 
+       type='function')], 
+       refusal=None, 
+       audio=None),
+    {
+      'role': 'tool',
+       'tool_call_id': 'call_KdOp1EK1woIDbFoiXv4HaZBP',
+       'name': 'roll_dice',
+       'content': '3'
+    }
+  ]
+  ```
+
+  </template>
+
+  <template #5>
+
+  Final response from LLM:
+  
+  ```python
+  {
+    "content": "The dice roll resulted in a **3**.\n\n**Reasoning:**\nA standard 10-sided die (d10) produces an integer  \
+                result between 1 and 10, inclusive. Since 3 is an integer and falls within the range $1 \\le 3 \\le 10$, \
+                the roll is valid.",
+    "role": "assistant",
+    "function_call": null,
+    "tool_calls": null,
+    "refusal": null,
+    "audio": null,
+    "content_blocks": [
+        {
+            "type": "text",
+            "text": "The dice roll resulted in a **3**.\n\n**Reasoning:**\nA standard 10-sided die (d10) produces an integer result between 1 and 10, inclusive. Since 3 is an integer and falls within the range $1 \\le 3 \\le 10$, the roll is valid."
+        }
+    ]
+  }
+  ```
+
+  </template>
+
+</v-switch>
 
 
 
