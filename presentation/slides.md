@@ -762,7 +762,7 @@ What happens if you set that field to be either a `str` or `None`?
 
 ---
 layout: top-title-two-cols
-columns: is-8
+columns: is-6
 color: violet-light
 hideInToc: true
 ---
@@ -786,7 +786,7 @@ hideInToc: true
 
 :: right ::
 
-<div>
+<div style="text-align: center;">
   <img src="/tool-call.png" style="width: 50%;"/>
 </div>
 
