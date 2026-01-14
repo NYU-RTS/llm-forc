@@ -721,6 +721,9 @@ prompt = prompt = """
 
 The `date` field is missing in the prompt, put some LLMs hallucinate one.
 
+What happens if you set that field to be either a `str` or `None`?
+
+
 :: right ::
   
   <SpeechBubble position="r" color="cyan-light" textAlign="left" shape="round" maxWidth="400px">
@@ -757,6 +760,40 @@ The `date` field is missing in the prompt, put some LLMs hallucinate one.
   ```
   </SpeechBubble>
 
+---
+layout: top-title-two-cols
+columns: is-8
+color: violet-light
+hideInToc: true
+---
+
+[^ref1]: <div class="ns-c-cite">Adapted from <a href="https://platform.openai.com/docs/guides/function-calling">Function calling, OpenAI</a>.</div>
+
+:: title ::
+
+# Tools
+
+:: left :: 
+
+- Until this point we send all the data to the LLM within the prompt and expect an answer that is reasonable. 
+
+- However, some queries require additional context that can only be gathered when the LLM is queried.
+
+- We can pass function/tool definitions to an LLM and let it decide if it needs to be called (or require it to be used).
+
+- There are some tools that 
+
+
+:: right ::
+
+<div>
+  <img src="/tool-call.png" style="width: 50%;"/>
+</div>
+
+Tool call schematic [^ref1]
+
+
+
 
 ---
 layout: side-title
@@ -779,5 +816,5 @@ Reach out to Research Technology Services, https://services.rt.nyu.edu/
 We have learnt:
 -  What LLMs are.
 -  How they generate text.
--  What embeddings are.
+-  How you can generate structured outputs from LLMs.
 -  How NYU facilitates your access to AI resources.
