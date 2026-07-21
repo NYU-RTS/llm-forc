@@ -243,7 +243,7 @@ hideInToc: true
 # LLM API servers
 
 :: left ::
-- LLMs are programmatically accessible via an HTTP server, typically via the OpenAI API
+- LLMs are programmatically accessible via an HTTP server, typically via the Responses API
 - To invoke the LLM, you send an HTTP request with:
     <div class="ns-c-tight">
     - your `API_KEY` <br/>
