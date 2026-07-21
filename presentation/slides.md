@@ -259,10 +259,10 @@ sequenceDiagram
     actor U as You
     participant Server as LLM API Server
 
-    U->>Server: POST /v1/chat/completions <br/> Headers: Authorization (API_KEY)<br/>Body: messages, model, parameters
+    U->>Server: POST /v1/responses <br/> Headers: Authorization (API_KEY)<br/>Body: messages, model, parameters
     activate Server
     Note over Server: LLM inference  <br/> generates a response
-    Server-->>U: JSON response contains:<br/>- choices<br/>- usage stats<br/>- metadata
+    Server-->>U: JSON response contains:<br/>- Response Output Message<br/>- usage stats<br/>- metadata
     deactivate Server
 
 ```
