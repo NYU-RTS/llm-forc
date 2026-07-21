@@ -886,25 +886,31 @@ hideInToc: true
 
   <template #5>
 
-  Final response from LLM:
+  Final response (truncated) from LLM:
   
   ```python
-  {
-    "content": "The dice roll resulted in a **3**.\n\n**Reasoning:**\nA standard 10-sided die (d10) produces an integer  \
-                result between 1 and 10, inclusive. Since 3 is an integer and falls within the range $1 \\le 3 \\le 10$, \
-                the roll is valid.",
-    "role": "assistant",
-    "function_call": null,
-    "tool_calls": null,
-    "refusal": null,
-    "audio": null,
-    "content_blocks": [
-        {
-            "type": "text",
-            "text": "The dice roll resulted in a **3**.\n\n**Reasoning:**\nA standard 10-sided die (d10) produces an integer result between 1 and 10, inclusive. Since 3 is an integer and falls within the range $1 \\le 3 \\le 10$, the roll is valid."
-        }
-    ]
-  }
+  Response(
+    model='gemini-3.5-flash', object='response',
+    output=[
+      ResponseOutputMessage(
+        content=[
+          ResponseOutputText(
+          text='The result of the 10-sided die roll is **6**.\n\n**Validity Check:**\n* \
+          **Die Type:** 10-sided die ($d10$).\n* **Possible Outcomes:** Any integer from 1 to 10 \
+          (inclusive): $\\{1, 2, 3, 4, 5, 6, 7, 8, 9, 10\\}$.\n* **Actual Outcome:** 4.\
+          \n\n**Reasoning:**\nSince the roll produced the number 4, which is an integer and \
+          falls within the valid range of 1 to 10 for a 10-sided die, the dice roll is **valid**.', 
+          type='output_text', logprobs=[])], role='assistant', status='completed', type='message', phase=None)], 
+      tool_choice='auto', 
+      tools=[FunctionTool(name='roll_dice', 
+      parameters={'type': 'object', 'properties': 
+          {'num_sides':{'type': 'integer', 'description': 'Number of sides for the die to roll'}}, 
+          'required': ['num_sides']}, strict=None, type='function', 
+      defer_loading=None, description='Roll the special N sided dice and return the result')],
+      usage=ResponseUsage(input_tokens=85, input_tokens_details=InputTokensDetails(cached_tokens=0),
+      output_tokens=296, output_tokens_details=OutputTokensDetails(reasoning_tokens=153),
+      total_tokens=381)
+  )  
   ```
 
   </template>
