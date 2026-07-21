@@ -285,52 +285,44 @@ hideInToc: true
 Example Query
 
 ```bash
-curl -X POST "https://ai-gateway.apps.cloud.rt.nyu.edu/v1/chat/completions " \
+curl https://ai-gateway.apps.cloud.rt.nyu.edu/v1/responses \
   -H "x-portkey-api-key: $PORTKEY_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
-    "model":"@vertexai/gemini-2.5-flash-lite", 
-    "messages": 
-    [
-      {
-        "role": "system", 
-        "content": "You are a helpful assistant." 
-      },
-      {
-        "role": "user",
-        "content": "Explain quantum computing in simple terms"
-      }
-    ],
-    "max_tokens":"64"
-    "temperature": 0.7
-  }'
+     "model":"@vertexai/gemini-3.5-flash", 
+     "input": 
+      [
+        {"role": "system", "content": "You are a helpful assistant." }, 
+        { "role": "user", "content": "What resources are available for genAI research at NYU?"}
+      ], 
+      "max_output_tokens":"1024"
+      }'
 ```
  </template>
   <template #2>
 
-  Response
+  Response (truncated)
 
 ```json 
-{
-  ...
-  "object":"chat.completion",
-  "model":"gemini-2.5-flash-lite",
-  "provider":"vertex-ai",
-  "choices":
-  [
-    {"message":
-      {"role":"assistant",
-        "content":"Imagine a regular computer uses bits, which are like light switches that can be either ON (1) or 
-        OFF (0). Quantum computers use **qubits**.\n\nHere's where it gets weird and wonderful:\n\n* 
-        **Qubits can be ON, OFF, or BOTH at the same time.** This"},
-      "index":0,
-      "finish_reason":"length"}
-  ],
-  "usage":{
-    "prompt_tokens":12, "completion_tokens":64, "total_tokens":76,
-    "completion_tokens_details":{"reasoning_tokens":0}
-    }
-}
+{"status":"completed", "model":"gemini-3.5-flash",
+"output": [{
+    "type":"message",
+    "role":"assistant",
+    "status":"completed",
+    "content":
+      [{
+          "type":"output_text",
+          "text":"New York University (NYU) is one of the world’s leading institutions for Artificial Intelligence 
+          and Generative AI (GenAI) research. Benefiting from its proximity to major tech hubs and its world",
+      }]
+}],
+"top_p":1, "presence_penalty":0, "frequency_penalty":0, "top_logprobs":0, "temperature":1, "reasoning":null,
+"usage": {
+    "input_tokens":18,
+    "input_tokens_details": {"cached_tokens":0},"output_tokens":1020,
+    "output_tokens_details":{"reasoning_tokens":979},"total_tokens":1038},
+    "max_output_tokens":"1024"
+}}
 ```
 
  </template>
@@ -538,26 +530,21 @@ Whenever you instantiate a `Portkey` client, the `base_url` must be set. If you 
 :: right ::
 
 ```python !children:text-xs
+import os
 from portkey_ai import Portkey
 
-portkey = Portkey(
+
+client = Portkey(
     base_url="https://ai-gateway.apps.cloud.rt.nyu.edu/v1/",
-    api_key="...",
+    api_key=os.getenv("PORTKEY_API_KEY"),
 )
 
-completion = portkey.chat.completions.create(
-    model="@vertexai/gemini-2.5-flash",
-    messages=[
-        {"role": "system", "content": "You are not a helpful assistant"},
-        {
-            "role": "user",
-            "content": "Complete the following sentence: \
-            The sun is shining and the sky is",
-        },
-    ],
+response = client.responses.create(
+    model="@vertexai/gemini-3.5-flash",
+    input="Complete the following sentence: The sun is shining and the sky is",
 )
 
-print(completion.choices[0]["message"]["content"])
+print(response.output)
 ```
 
 
@@ -644,14 +631,12 @@ class ArticleSpec(BaseModel):
 ```
 and call the LLM with the response schema passed alongside the prompt:
 ```python
-completion = portkey.beta.chat.completions.parse(
-    model="@vertexai/gemini-2.5-flash-lite",
-    messages=[
-        {"role": "user", "content": f"{prompt}"}
-    ],
-    response_format=ArticleSpec,
+response = portkey.responses.parse(
+    model="@vertexai/gemini-3-flash-preview",
+    input=prompt,
+    text_format=ArticleSpec
 )
-print(completion.choices[0].message.content)
+print(response.output_parsed)
 ```
 
 :: right ::
@@ -721,7 +706,7 @@ prompt = prompt = """
 
 The `date` field is missing in the prompt, put some LLMs hallucinate one.
 
-What happens if you set that field to be either a `str` or `None`?
+What happens if you set that field to be `Optional`?
 
 
 :: right ::
@@ -784,7 +769,7 @@ hideInToc: true
 - There are some tools like web search that are offered by LLM providers as "built-in" tools that users do not have to implement. Here is the `google search` tool that can be used with `gemini` models 
 
 ```json
-    {"type": "function", "function": {"name": "google_search"}}
+    {"type": "function", "name": "google_search"}
 ```
 
 :: right ::
@@ -814,30 +799,27 @@ hideInToc: true
   Define the tool implementation and its specification
 
   ```python
-def roll_dice(N: int) -> int:
+  def roll_dice(N: int) -> int:
     """Roll an N sided die"""
     return random.randint(1,N)
-
-tools = [
-    {
+    
+    tools = [
+      {
         "type": "function",
-        "function": {
-            "name": "roll_dice",
-            "description": "Roll the special N sided dice and return the result",
-            "parameters": {
-                "type": "object",
-                "properties": {
-                    "num_sides": {
-                        "type": "integer",
-                        "description": "Number of sides for the die to roll"
-                    }
-                },
-                "required": ["num_sides"]
-            }
+        "name": "roll_dice",
+        "description": "Roll the special N sided dice and return the result",
+        "parameters": {
+            "type": "object",
+             "properties": {
+                 "num_sides": {
+                    "type": "integer",
+                     "description": "Number of sides for the die to roll"
+                }
+              },
+              "required": ["num_sides"]
         }
-    }
-]
-
+      }
+    ]
   ```
   </template>
   
@@ -845,15 +827,13 @@ tools = [
 
   Pass a prompt to the LLM with this tool:
   ```python
-  messages = [
-        {"role": "user", "content": "Roll a 10 sided die and check if the dice roll was valid. Explain your reasoning."}
-]
-completion = portkey.chat.completions.create(
-    model="@vertexai/gemini-3-flash-preview",
-    messages=messages,
+  response = portkey.responses.create(
+    model="@vertexai/gemini-3.5-flash",
+    input=messages,
     tools=tools,
-)
-print(completion.choices[0].message)
+    )
+
+  print(response.output_text)
   ```
   </template>
 
@@ -861,25 +841,19 @@ print(completion.choices[0].message)
   View the response which contains a request to execute the tool:
 
   ```python
-  {
-    "content": null,
-    "role": "assistant",
-    "function_call": null,
-    "tool_calls": [
-        {
-            "id": "call_eNsEVG9AB0RbfhGgfqYrxAXq",
-            "function": {
-                "arguments": "{\"num_sides\":10}",
-                "name": "roll_dice",
-                "thought_signature": "..."
-            },
-            "type": "function"
-        }
-    ],
-    "refusal": null,
-    "audio": null
-}
-```
+  [
+    ResponseFunctionToolCall
+    (
+      arguments='{"num_sides":10}',
+      call_id='call_l38M88Up4bBKgxsU9ZshNVcK', 
+      name='roll_dice', 
+      type='function_call',
+      id='fc_1fa5cd13-13c2-4b66-9937-7907c60fc118', 
+      namespace=None, 
+      status='completed'
+    )
+  ]
+  ```
 
   </template>
 
@@ -892,21 +866,18 @@ print(completion.choices[0].message)
       'role': 'user',
       'content': 'Roll a 10 sided die and check if the dice roll was valid. Explain your reasoning.'
     },
-    ChatCompletionMessage(
-      content=None,
-      role='assistant', 
-      function_call=None, 
-      tool_calls=[ChatCompletionMessageToolCall(id='call_KdOp1EK1woIDbFoiXv4HaZBP', 
-      function=FunctionCall(arguments='{"num_sides":10}',
-       name='roll_dice', thought_signature='...'), 
-       type='function')], 
-       refusal=None, 
-       audio=None),
+    ResponseFunctionToolCall(
+      arguments='{"num_sides":10}', 
+      call_id='call_l38M88Up4bBKgxsU9ZshNVcK', 
+      name='roll_dice', 
+      type='function_call', 
+      id='fc_1fa5cd13-13c2-4b66-9937-7907c60fc118', 
+      namespace=None, 
+      status='completed'),
     {
-      'role': 'tool',
-       'tool_call_id': 'call_KdOp1EK1woIDbFoiXv4HaZBP',
-       'name': 'roll_dice',
-       'content': '3'
+      'type': 'function_call_output',
+      'call_id': 'call_l38M88Up4bBKgxsU9ZshNVcK',
+      'output': '4'
     }
   ]
   ```
