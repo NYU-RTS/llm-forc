@@ -519,7 +519,7 @@ hideInToc: true
 # Sending a request in Python
 
 :: left ::
-- We will use the `portkey-ai` package for this using an API key created from the UI and the following `base_url`: `https://ai-gateway.apps.cloud.rt.nyu.edu/v1/` (or to `http://ai-gateway.jhub/v1` if you're using JupyterHub today).
+- We will use the `portkey-ai` package for this using an API key created from the UI and the following `base_url`: `https://ai-gateway.apps.cloud.rt.nyu.edu/v1/` (or to `https://portkey-lb.rt.nyu.edu/prod/` if you're using JupyterHub today).
 
 <AdmonitionType type="warning" width="325px">
 
