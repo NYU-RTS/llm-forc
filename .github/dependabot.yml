@@ -6,3 +6,9 @@ updates:
     schedule:
       interval: "weekly"
 
+  # Keep the pinned base image tag in mcp-servers/Containerfile current
+  - package-ecosystem: "docker"
+    directory: "/mcp-servers"
+    schedule:
+      interval: "weekly"
+

@@ -1,0 +1,35 @@
+# Upstream release to build. Bump deliberately (after checking the changelog),
+# don't track a moving branch/tag.
+ARG SOCRATA_MCP_VERSION=v0.9.0
+
+FROM registry.access.redhat.com/hi/nodejs:24-builder AS builder
+ARG SOCRATA_MCP_VERSION
+
+USER root
+RUN dnf update -y && dnf install -y git && dnf clean all
+USER ${CONTAINER_DEFAULT_USER}
+
+WORKDIR /app
+RUN git clone --branch "${SOCRATA_MCP_VERSION}" --depth 1 \
+      https://github.com/npstorey/socrata-mcp-server.git . \
+    && rm -rf .git
+
+RUN npm ci
+RUN npm run build
+RUN npm prune --omit=dev
+
+FROM registry.access.redhat.com/hi/nodejs:24
+ARG SOCRATA_MCP_VERSION
+
+LABEL org.opencontainers.image.source="https://github.com/npstorey/socrata-mcp-server" \
+      org.opencontainers.image.version="${SOCRATA_MCP_VERSION}" \
+      org.opencontainers.image.licenses="MIT" \
+      org.opencontainers.image.description="Socrata Open Data (SODA) MCP server"
+
+WORKDIR /app
+COPY --from=builder /app .
+
+# HTTP (streamable) transport listens here by default; override PORT to change it.
+EXPOSE 8000
+
+CMD ["npm", "run", "start"]
