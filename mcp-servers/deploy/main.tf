@@ -1,32 +1,20 @@
-# Service Account that will be used
-resource "google_service_account" "sa_invoke_cloud_run" {
-  account_id   = "sa-invoke-cloud-run"
-  display_name = "Service account to invoke cloud-run"
+# Runtime identity for the container.
+resource "google_service_account" "cloud_run_runtime" {
+  account_id   = "sa-cloud-run-runtime"
+  display_name = "Runtime identity for the socrata-mcp Cloud Run service"
 }
 
-# Policy data to grant permissions on Cloud Run instance to SA created above
-data "google_iam_policy" "invoker_policy" {
-  binding {
-    role    = "roles/run.invoker"
-    members = ["serviceAccount:${google_service_account.sa_invoke_cloud_run.email}"]
-  }
-}
-
-# Grant permissions to SA for this Cloud Run instance
-resource "google_cloud_run_v2_service_iam_policy" "policy" {
-  project     = google_cloud_run_v2_service.socrata_mcp.project
-  location    = google_cloud_run_v2_service.socrata_mcp.location
-  name        = google_cloud_run_v2_service.socrata_mcp.name
-  policy_data = data.google_iam_policy.invoker_policy.policy_data
-}
-
-# Cloud Run instance using the SA created above
+# Publicly reachable, unauthenticated at the Cloud Run layer: the only
+# caller is expected to be an MCP gateway that handles auth and rate
+# limiting upstream. Disabling the invoker IAM check is Google's
+# recommended way to do this: https://docs.cloud.google.com/run/docs/authenticating/public
 resource "google_cloud_run_v2_service" "socrata_mcp" {
-  name                = "socrata-mcp-service"
-  location            = "us-central1"
-  deletion_protection = false
-  ingress             = "INGRESS_TRAFFIC_ALL"
-  service_account     = google_service_account.sa_invoke_cloud_run.email
+  name                 = "socrata-mcp-service"
+  location             = "us-central1"
+  deletion_protection  = false
+  ingress              = "INGRESS_TRAFFIC_ALL"
+  service_account      = google_service_account.cloud_run_runtime.email
+  invoker_iam_disabled = true
 
   scaling {
     min_instance_count = 0
@@ -41,12 +29,4 @@ resource "google_cloud_run_v2_service" "socrata_mcp" {
       }
     }
   }
-}
-
-# ID token for sa_invoke_cloud_run, scoped to this service's URL.
-# Whoever runs `terraform apply` must hold roles/iam.serviceAccountTokenCreator
-# on sa_invoke_cloud_run to mint this.
-data "google_service_account_id_token" "invoker_token" {
-  target_service_account = google_service_account.sa_invoke_cloud_run.email
-  target_audience        = google_cloud_run_v2_service.socrata_mcp.uri
 }
