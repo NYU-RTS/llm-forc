@@ -13,7 +13,6 @@ resource "google_cloud_run_v2_service" "socrata_mcp" {
   location             = "us-central1"
   deletion_protection  = false
   ingress              = "INGRESS_TRAFFIC_ALL"
-  service_account      = google_service_account.cloud_run_runtime.email
   invoker_iam_disabled = true
 
   scaling {
@@ -22,6 +21,8 @@ resource "google_cloud_run_v2_service" "socrata_mcp" {
   }
 
   template {
+    service_account = google_service_account.cloud_run_runtime.email
+
     containers {
       image = "ghcr.io/nyu-rts/socrata-mcp-server:sha-a896f040a4de976e86a6a70abf8dd9ca5630b314"
       ports {
