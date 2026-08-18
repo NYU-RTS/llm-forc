@@ -30,13 +30,14 @@ jobs:
         with:
           bun-version: latest
 
-      # Cache bun dependencies
+      # Cache bun's global package store (not node_modules, which bun rebuilds
+      # deterministically each run — caching node_modules directly risks a
+      # corrupted/partial tree being restored and never repaired under
+      # --frozen-lockfile)
       - name: Cache bun dependencies
         uses: actions/cache@v6
         with:
-          path: |
-            presentation/node_modules
-            ~/.bun/install/cache
+          path: ~/.bun/install/cache
           key: bun-${{ hashFiles('presentation/bun.lock') }}
           restore-keys: |
             bun-
