@@ -2,8 +2,8 @@
 # don't track a moving branch/tag.
 ARG FLINT_MCP_VERSION=0.5.1
 
-# Hummingbird hardened Node.js 24.18.1 builder image.
-FROM registry.access.redhat.com/hi/nodejs:24.18.1-builder@sha256:888f9bed15090ec74fce38bae272add98b5641b3d05bd268fc0c9feaa98c7b70 AS builder
+# Hummingbird hardened Node.js 24 builder image.
+FROM registry.access.redhat.com/hi/nodejs:24-builder AS builder
 ARG FLINT_MCP_VERSION
 
 USER root
@@ -21,8 +21,8 @@ RUN npm ci
 RUN npm run build:js
 RUN npm run build:mcp
 
-# Hummingbird hardened Node.js 24.18.1 runtime image.
-FROM registry.access.redhat.com/hi/nodejs:24.18.1@sha256:0415d3ff1bdaada18f8828f4d8e14d37d5e0c24545d6fbe73cf4c1de33e4808d
+# Hummingbird hardened Node.js 24 runtime image.
+FROM registry.access.redhat.com/hi/nodejs:24
 ARG FLINT_MCP_VERSION
 
 LABEL org.opencontainers.image.source="https://github.com/microsoft/flint-chart" \
