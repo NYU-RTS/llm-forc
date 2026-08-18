@@ -4,11 +4,11 @@ on:
   push:
     branches: [main]
     paths:
-      - "mcp-servers/Containerfile"
+      - "mcp-servers/socrata-mcp/Containerfile"
       - ".github/workflows/publish-mcp-servers.yaml"
   pull_request:
     paths:
-      - "mcp-servers/Containerfile"
+      - "mcp-servers/socrata-mcp/Containerfile"
       - ".github/workflows/publish-mcp-servers.yaml"
   workflow_dispatch:
 
@@ -50,8 +50,8 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v7
         with:
-          context: ./mcp-servers
-          file: ./mcp-servers/Containerfile
+          context: ./mcp-servers/socrata-mcp
+          file: ./mcp-servers/socrata-mcp/Containerfile
           platforms: linux/amd64,linux/arm64
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}

@@ -19,7 +19,6 @@ RUN npm ci
 RUN npm run build
 RUN npm prune --omit=dev
 
-# Hummingbird hardened Node.js 24.18.1 runtime image.
 FROM registry.access.redhat.com/hi/nodejs:24.18.1@sha256:0415d3ff1bdaada18f8828f4d8e14d37d5e0c24545d6fbe73cf4c1de33e4808d
 ARG SOCRATA_MCP_VERSION
 
