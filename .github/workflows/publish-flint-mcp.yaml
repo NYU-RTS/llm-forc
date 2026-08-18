@@ -1,19 +1,19 @@
-name: Publish MCP server images
+name: Publish Flint MCP image
 
 on:
   push:
     branches: [main]
     paths:
-      - "mcp-servers/socrata-mcp/Containerfile"
-      - ".github/workflows/publish-mcp-servers.yaml"
+      - "mcp-servers/flint-mcp/Containerfile"
+      - ".github/workflows/publish-flint-mcp.yaml"
   pull_request:
     paths:
-      - "mcp-servers/socrata-mcp/Containerfile"
-      - ".github/workflows/publish-mcp-servers.yaml"
+      - "mcp-servers/flint-mcp/Containerfile"
+      - ".github/workflows/publish-flint-mcp.yaml"
   workflow_dispatch:
 
 concurrency:
-  group: publish-mcp-servers-${{ github.ref }}
+  group: publish-flint-mcp-${{ github.ref }}
   cancel-in-progress: true
 
 permissions:
@@ -21,7 +21,7 @@ permissions:
   packages: write
 
 jobs:
-  socrata-mcp-server:
+  flint-mcp:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
@@ -42,7 +42,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v6
         with:
-          images: ghcr.io/${{ github.repository_owner }}/socrata-mcp-server
+          images: ghcr.io/${{ github.repository_owner }}/flint-mcp
           tags: |
             type=raw,value=latest,enable={{is_default_branch}}
             type=sha,format=long
@@ -50,8 +50,8 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v7
         with:
-          context: ./mcp-servers/socrata-mcp
-          file: ./mcp-servers/socrata-mcp/Containerfile
+          context: ./mcp-servers/flint-mcp
+          file: ./mcp-servers/flint-mcp/Containerfile
           platforms: linux/amd64,linux/arm64
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}

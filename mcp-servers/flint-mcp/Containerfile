@@ -1,0 +1,52 @@
+# Upstream release to build. Bump deliberately (after checking the changelog),
+# don't track a moving branch/tag.
+ARG FLINT_MCP_VERSION=0.5.1
+
+# Hummingbird hardened Node.js 24 builder image.
+FROM registry.access.redhat.com/hi/nodejs:24-builder AS builder
+ARG FLINT_MCP_VERSION
+
+USER root
+RUN dnf install -y ca-certificates git \
+    && dnf clean all
+USER ${CONTAINER_DEFAULT_USER}
+
+WORKDIR /src
+RUN git clone --branch "${FLINT_MCP_VERSION}" --depth 1 \
+      https://github.com/microsoft/flint-chart.git . \
+    && rm -rf .git
+
+# flint-mcp imports the flint-chart workspace, so build the library first.
+RUN npm ci
+RUN npm run build:js
+RUN npm run build:mcp
+
+# Hummingbird hardened Node.js 24 runtime image.
+FROM registry.access.redhat.com/hi/nodejs:24
+ARG FLINT_MCP_VERSION
+
+LABEL org.opencontainers.image.source="https://github.com/microsoft/flint-chart" \
+      org.opencontainers.image.version="${FLINT_MCP_VERSION}" \
+      org.opencontainers.image.licenses="MIT" \
+      org.opencontainers.image.description="Flint Chart MCP server"
+
+WORKDIR /app
+
+# Install only the MCP package's production dependencies. This also installs
+# the platform-specific native rendering packages in the runtime image.
+COPY --from=builder /src/packages/flint-mcp/package.json ./package.json
+RUN npm install --omit=dev --no-audit --no-fund \
+    && npm cache clean --force
+
+COPY --from=builder /src/packages/flint-mcp/dist ./dist
+COPY --from=builder /src/packages/flint-mcp/assets ./assets
+
+ENV NODE_ENV=production \
+    FLINT_MCP_TRANSPORT=http \
+    FLINT_MCP_HOST=0.0.0.0 \
+    FLINT_MCP_DISABLE_FILE_REFERENCE=1 \
+    PORT=8080
+
+EXPOSE 8080
+
+CMD ["node", "dist/cli.js", "--transport", "http"]

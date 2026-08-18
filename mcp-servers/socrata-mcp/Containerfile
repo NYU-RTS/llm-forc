@@ -2,6 +2,7 @@
 # don't track a moving branch/tag.
 ARG SOCRATA_MCP_VERSION=v0.9.0
 
+# Hummingbird hardened Node.js 24 builder image.
 FROM registry.access.redhat.com/hi/nodejs:24-builder AS builder
 ARG SOCRATA_MCP_VERSION
 
