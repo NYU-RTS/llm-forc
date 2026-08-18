@@ -5,6 +5,7 @@ requires-python = ">=3.14"
 dependencies = [
     "jupyterlab>=4.5.2",
     "portkey-ai>=2.1.0",
+    "pydantic-ai-harness[anthropic,openai]>=0.22.0",
     "pydantic-ai-slim[mcp,openai,web-fetch]>=2.10.0",
     "pydantic-evals>=2.13.0",
     "rich>=15.0.0",
