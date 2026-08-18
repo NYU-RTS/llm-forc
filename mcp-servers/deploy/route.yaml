@@ -1,0 +1,18 @@
+# No custom certificate is specified below, so the OpenShift router applies
+# its default wildcard certificate for *.apps.cloud.rt.nyu.edu.
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: socrata-mcp-server
+  labels:
+    app: socrata-mcp-server
+spec:
+  host: socrata-mcp.apps.cloud.rt.nyu.edu
+  to:
+    kind: Service
+    name: socrata-mcp-server
+  port:
+    targetPort: http
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect
