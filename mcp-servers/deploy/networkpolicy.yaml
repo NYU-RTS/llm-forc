@@ -10,5 +10,4 @@ spec:
     - Ingress
   ingress:
     - from:
-        - ipBlock:
-            cidr: 0.0.0.0/0
+        - namespaceSelector: {}
