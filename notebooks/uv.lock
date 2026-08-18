@@ -24,6 +24,25 @@ wheels = [
 ]
 
 [[package]]
+name = "anthropic"
+version = "0.122.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "anyio" },
+    { name = "distro" },
+    { name = "docstring-parser" },
+    { name = "httpx" },
+    { name = "jiter" },
+    { name = "pydantic" },
+    { name = "sniffio" },
+    { name = "typing-extensions" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/fa/23/9987d70b74e3481d5bc5d2021d3e10fd5f60c1f7b54088ea86506d9b7f2b/anthropic-0.122.0.tar.gz", hash = "sha256:ffec56ae96657c8d19fa575ec96f140f380c353a07ab7d61b92eb18ee6536601", size = 1021535, upload-time = "2026-08-13T18:36:00.307Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/26/5b/f5c87e71097a9f89f1b414d1ef7ae8439051fae57d5e4ee90946082982b8/anthropic-0.122.0-py3-none-any.whl", hash = "sha256:45ec906452ffae6b5f7f0c53d01f50bfb7e4ce878d7ae8e4309d13171e557e67", size = 1041853, upload-time = "2026-08-13T18:36:01.831Z" },
+]
+
+[[package]]
 name = "anyio"
 version = "4.14.2"
 source = { registry = "https://pypi.org/simple" }
@@ -505,6 +524,15 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/8c/8b/57666417c0f90f08bcafa776861060426765fdb422eb10212086fb811d26/dnspython-2.8.0.tar.gz", hash = "sha256:181d3c6996452cb1189c4046c61599b84a5a86e099562ffde77d26984ff26d0f", size = 368251, upload-time = "2025-09-07T18:58:00.022Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/ba/5a/18ad964b0086c6e62e2e7500f7edc89e3faa45033c71c1893d34eed2b2de/dnspython-2.8.0-py3-none-any.whl", hash = "sha256:01d9bbc4a2d76bf0db7c1f729812ded6d912bd318d3b1cf81d30c0f845dbf3af", size = 331094, upload-time = "2025-09-07T18:57:58.071Z" },
+]
+
+[[package]]
+name = "docstring-parser"
+version = "0.18.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/e0/4d/f332313098c1de1b2d2ff91cf2674415cc7cddab2ca1b01ae29774bd5fdf/docstring_parser-0.18.0.tar.gz", hash = "sha256:292510982205c12b1248696f44959db3cdd1740237a968ea1e2e7a900eeb2015", size = 29341, upload-time = "2026-04-14T04:09:19.867Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/a7/5f/ed01f9a3cdffbd5a008556fc7b2a08ddb1cc6ace7effa7340604b1d16699/docstring_parser-0.18.0-py3-none-any.whl", hash = "sha256:b3fcbed555c47d8479be0796ef7e19c2670d428d72e96da63f3a40122860374b", size = 22484, upload-time = "2026-04-14T04:09:18.638Z" },
 ]
 
 [[package]]
@@ -1344,6 +1372,7 @@ source = { virtual = "." }
 dependencies = [
     { name = "jupyterlab" },
     { name = "portkey-ai" },
+    { name = "pydantic-ai-harness", extra = ["anthropic"] },
     { name = "pydantic-ai-slim", extra = ["mcp", "openai", "web-fetch"] },
     { name = "pydantic-evals" },
     { name = "rich" },
@@ -1353,6 +1382,7 @@ dependencies = [
 requires-dist = [
     { name = "jupyterlab", specifier = ">=4.5.2" },
     { name = "portkey-ai", specifier = ">=2.1.0" },
+    { name = "pydantic-ai-harness", extras = ["anthropic", "openai"], specifier = ">=0.22.0" },
     { name = "pydantic-ai-slim", extras = ["mcp", "openai", "web-fetch"], specifier = ">=2.10.0" },
     { name = "pydantic-evals", specifier = ">=2.13.0" },
     { name = "rich", specifier = ">=15.0.0" },
@@ -1574,6 +1604,25 @@ email = [
 ]
 
 [[package]]
+name = "pydantic-ai-harness"
+version = "0.22.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "genai-prices" },
+    { name = "httpx" },
+    { name = "pydantic-ai-slim" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/15/22/fb5b1dfd61a869ff1db99a608059723c13213f8802e00792e553a97bd8e9/pydantic_ai_harness-0.22.0.tar.gz", hash = "sha256:4b31eecfb6d33cb04bf3a01097b8e5f726311f999fc3eac64359976264eb33b4", size = 2223581, upload-time = "2026-08-18T03:39:51.357Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/28/e1/009693edaf36aa26e26427bf271b66dd6d45273b4ae8c2dd43cbffb0fdb8/pydantic_ai_harness-0.22.0-py3-none-any.whl", hash = "sha256:f51e54f04ecd58b0df981c6961c542a2d30e97ada20064c92d6662d51c021596", size = 640630, upload-time = "2026-08-18T03:39:49.935Z" },
+]
+
+[package.optional-dependencies]
+anthropic = [
+    { name = "pydantic-ai-slim", extra = ["anthropic"] },
+]
+
+[[package]]
 name = "pydantic-ai-slim"
 version = "2.30.0"
 source = { registry = "https://pypi.org/simple" }
@@ -1593,6 +1642,9 @@ wheels = [
 ]
 
 [package.optional-dependencies]
+anthropic = [
+    { name = "anthropic" },
+]
 mcp = [
     { name = "fastmcp-slim", extra = ["client"] },
 ]
