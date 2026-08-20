@@ -1041,14 +1041,12 @@ color: violet-light
 
   <template #2>
 
-  ```mermaid {scale: 0.725}
+  ```mermaid {scale: 0.75}
   flowchart LR
     A[Agent] -->|Request with tools| M[LLM]
     M -->|Response: tool call| A
-    A -->|Tool Call and parameters| R[Tool call runner]
-    R -->|Tool Call result| A
-    R -->|Parameters| T[Tool]
-    T -->|Result| R
+    A -->|Tool Call and parameters| T[Tool]
+    T -->|Result| A
     A -->|Request with result of tool calls| M
     M -->|Final response with no tool calls| A
   ```
@@ -1063,6 +1061,43 @@ color: violet-light
   </template>
 
 </v-switch>
+
+
+---
+layout: top-title
+color: violet-light
+hideInToc: true
+---
+
+:: title ::
+
+# Core Agent Loop
+
+:: content ::
+
+LLMs can respond to a request with the results of a tool call with yet another tool call request. Instead of manually handling this, an `Agent` will execute all subsequent tool calls from LLM responses until a response with no tool call arrives.
+
+
+```mermaid {scale: 0.525}
+sequenceDiagram
+    actor U as User
+    participant A as Agent
+    participant M as LLM
+    participant T as Tool
+
+    U->>A: Prompt
+    loop Until the response has no tool calls
+        A->>M: Request + available tools + context
+        M-->>A: Response
+        alt Response contains a tool call
+            A->>T: Execute tool with arguments
+            T-->>A: Tool result
+            Note over A: Send the result back to the LLM
+        else Response has no tool calls
+            A-->>U: Final response
+        end
+    end
+```
 
 
 ---
