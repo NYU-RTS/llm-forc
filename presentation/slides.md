@@ -1044,6 +1044,63 @@ color: violet-light
 
   ```
 
+
+---
+layout: top-title-two-cols
+columns: is-6
+align: l-lt-lt
+color: violet-light
+hideInToc: true
+---
+
+:: title ::
+
+# A Gentle Introduction To `async` / `await`
+
+:: left ::
+
+### Synchronous flow
+
+The program waits for the function to finish before moving on:
+
+```mermaid {scale: 0.5}
+flowchart LR
+  A[Start] --> B[Call function]
+  B --> C[Wait for result]
+  C --> D[Continue]
+```
+
+```python
+result = function(parameters)
+use(result)
+```
+
+Results are available as soon as the function is run.
+
+
+:: right ::
+
+### Asynchronous flow
+
+An `async` function can do its work while the program handles other tasks:
+
+```mermaid {scale: 0.5}
+flowchart LR
+  A[Start] --> B[Call async function]
+  B --> C[await pauses until ready]
+  C --> D[Continue]
+```
+
+```python
+result = await async_function(parameters)
+use(result)
+```
+
+Asynchronous functions are scheduled to be run on an `event loop`. The main benefit is that the program can run other tasks while the asynchronous function runs in the background.
+
+For today, we will be using `await` to pause execution until the result is ready. With it, this call behaves synchronously from this point of view.
+
+
 ---
 layout: top-title
 color: violet-light
