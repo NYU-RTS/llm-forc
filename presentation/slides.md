@@ -820,7 +820,7 @@ hideInToc: true
   Pass a prompt to the LLM with this tool:
   ```python
   response = portkey.responses.create(
-    model="@vertexai/gemini-7-flash",
+    model="@vertexai/gemini-3.7-flash",
     input=messages,
     tools=tools,
     )
