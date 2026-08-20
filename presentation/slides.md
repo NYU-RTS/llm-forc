@@ -89,7 +89,6 @@ layout: top-title-two-cols
 columns: is-7-5
 align: l-lt-lt
 color: violet-light
-hideInToc: true
 ---
 
 [^ref1]: <div class="ns-c-cite"><a href="https://arxiv.org/abs/1706.03762">Attention Is All You Need</a></div>
@@ -201,13 +200,11 @@ hideInToc: true
 
 LLMs generate output one token at a time[^ref1]
 
-
 ---
 layout: top-title-two-cols
 columns: is-6
 align: l-lt-lt
 color: violet-light
-hideInToc: true
 ---
 
 
@@ -234,7 +231,6 @@ Reasoning LLMs have been trained to imitate thought processes[^ref1]
 layout: top-title-two-cols
 columns: is-6
 color: violet-light
-hideInToc: true
 ---
 
 
@@ -381,7 +377,6 @@ Head back to the tokenizer playgrond and look for the these special tokens:
 layout: top-title-two-cols
 columns: is-4
 color: violet-light
-hideInToc: true
 ---
 
 :: title ::
@@ -480,7 +475,6 @@ hideInToc: true
 layout: top-title-two-cols
 columns: is-7
 color: violet-light
-hideInToc: true
 ---
 
 :: title ::
@@ -612,7 +606,6 @@ By Carson Sievert
 layout: top-title-two-cols
 columns: is-6
 color: violet-light
-hideInToc: true
 ---
 :: title ::
 
@@ -749,7 +742,6 @@ What happens if you set that field to be `Optional`?
 layout: top-title-two-cols
 columns: is-7
 color: violet-light
-hideInToc: true
 ---
 
 [^ref1]: <div class="ns-c-cite">Adapted from <a href="https://platform.openai.com/docs/guides/function-calling">Function calling, OpenAI</a>.</div>
@@ -916,6 +908,222 @@ hideInToc: true
   </template>
 
 </v-switch>
+
+
+
+---
+layout: top-title
+color: violet-light
+hideInToc: true
+---
+
+:: title ::
+
+# LLM Tool Calling
+
+:: content ::
+
+<v-switch>
+  <template #1>
+
+  ```mermaid {scale: 0.75}
+  flowchart LR
+    U[User] -->|Request with tools| M[LLM]
+  ```
+  </template>
+  
+  <template #2> 
+
+  ```mermaid {scale: 0.75}
+  flowchart LR
+    U[User] -->|Request with tools| M[LLM]
+    M -->|Response: tool call| U
+  ```
+  </template>
+  <template #3> 
+
+  ```mermaid {scale: 0.75}
+  flowchart LR
+    U[User] -->|Request with tools| M[LLM]
+    M -->|Response: tool call| U
+    U -->|Execute Tool| T[Tool]
+  ```
+  </template>
+  <template #4> 
+
+  ```mermaid {scale: 0.75}
+  flowchart LR
+    U[User] -->|Request with tools| M[LLM]
+    M -->|Response: tool call| U
+    U -->|Execute Tool| T[Tool]
+  ```
+
+  ```mermaid {scale: 0.75}
+  flowchart LR
+    U[User] -->|New request with result of Tool call| M[LLM]
+  ```
+  </template>
+  
+  <template #5> 
+
+  ```mermaid {scale: 0.75}
+  flowchart LR
+    U[User] -->|Request with tools| M[LLM]
+    M -->|Response: tool call| U
+    U -->|Execute Tool| T[Tool]
+  ```
+
+  ```mermaid {scale: 0.75}
+  flowchart LR
+    U[User] -->|New request with result of Tool call| M[LLM]
+    M -->|Final answer with no tool calls| U
+  ```
+  </template>
+
+</v-switch>
+
+
+---
+layout: top-title
+color: violet-light
+hideInToc: true
+---
+
+:: title ::
+
+# Multiple Tool Calls
+
+:: content ::
+
+  One response can request multiple tools: 
+  ```mermaid {scale: 0.75}
+  flowchart LR
+    U[User] -->|Request with tools| M[LLM]
+    M -->|Response: tool call 1| U
+    U -->|Execute Tool 1| T1[Tool]
+    M -->|Response: tool call 2| U
+    U -->|Execute Tool 2| T2[Tool]
+  ```
+
+  Execute them and send their results back together:
+
+  ```mermaid {scale: 0.75}
+  flowchart LR
+    U[User] -->|New request with result of Tool calls 1 and 2| M[LLM]
+    M -->|Final answer with no tool calls| U
+  ```
+
+
+---
+layout: top-title
+color: violet-light
+---
+
+:: title ::
+
+# Agents
+
+:: content ::
+
+- We've seen how we could handle each tool call ourselves
+- Since this is a common pattern that occurs with LLMs in many scenarios, `Agent` frameworks were developed to handle this
+- With an agent, the workflow now becomes:
+
+  ```mermaid {scale: 0.8}
+  flowchart LR
+    U[User] -->|Prompt with tools| A[Agent]
+    A[Agent] -->|Request with tools| M[LLM]
+    M -->|Response: tool call| A
+    A -->|Tool Call and parameters| R[Tool call runner]
+    R -->|Tool Call result| A
+    R -->|Parameters| T[Tool]
+    T -->|Result| R
+    A -->|Request with result of tool calls| M
+    M -->|Final response with no tool calls| A
+    A -->|Final response with no tool calls| U
+
+  ```
+
+---
+layout: top-title
+color: violet-light
+---
+
+:: title ::
+
+# Agents, with PydanticAI
+
+:: content ::
+
+
+<v-switch>
+  <template #1>
+  We can rewrite our previous, verbose chain of events as:
+
+  ```python
+  agent = Agent(
+      name="agent-with-custom-tool",
+      model=OpenAIResponsesModel(
+          model_name="@vertexai/gemini-3.5-flash",
+          provider=OpenAIProvider(
+              base_url="https://ai-gateway.apps.cloud.rt.nyu.edu/v1/",
+              api_key=os.getenv("PORTKEY_API_KEY"),
+          ),
+      ),
+  )
+
+  @agent.tool_plain  
+  def roll_dice(N: int) -> int:
+    """Roll a N-sided die and return the result."""
+    return random.randint(1, N)
+  ```
+  </template>
+
+  <template #2>
+  Execution becomes much simpler as the `agent` handles the tool call for us:
+
+  <br/>
+  <br/>
+
+  ```python
+  # await is added because the agent is run asynchronously
+  result = await agent.run( 
+                           'Roll a 10 sided die and check if \
+                            the dice roll was valid. \
+                            Explain your reasoning.'
+                          ) 
+  ```
+  </template>
+</v-switch>
+
+
+---
+layout: top-title
+color: violet-light
+---
+
+:: title ::
+
+# Model Context Protocol
+
+:: content ::
+
+Model Context Protocol is a standardized interface to provide a set of tools instead of describing them one at a time. The responsibility of tool execution now lies with the MCP server.
+
+<br/>
+
+  ```mermaid {scale: 0.8}
+  flowchart LR
+    U[User] -->|Prompt with MCP server addresses| A[Agent]
+    A[Agent] -->|Request with tool call| M[LLM]
+    M -->|Response: tool call| A
+    A -->|Tool Call and parameters| C[MCP client]
+    C -->|Tool Call result| A
+    C -->|Execute Tool| S[MCP Server]
+    A -->|Request with result of tool calls| M
+    M -->|Final response with no tool calls| A
+    A -->|Final response with no tool calls| U
+  ```
 
 
 

@@ -3,10 +3,9 @@ name = "notebooks"
 version = "0.1.0"
 requires-python = ">=3.14"
 dependencies = [
-    "jupyterlab>=4.5.2",
-    "portkey-ai>=2.1.0",
-    "pydantic-ai-harness[anthropic,openai]>=0.22.0",
-    "pydantic-ai-slim[mcp,openai,web-fetch]>=2.10.0",
-    "pydantic-evals>=2.13.0",
-    "rich>=15.0.0",
+    "jupyterlab>=4.6.3",
+    "portkey-ai>=2.3.4",
+    "pydantic-ai-harness[anthropic]>=0.24.0",
+    "pydantic-ai-slim[mcp,openai]>=2.32.1",
+    "pydantic-evals>=2.32.1",
 ]

@@ -1,0 +1,256 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "config": {
+    "view": {
+      "continuousWidth": 400,
+      "continuousHeight": 320,
+      "stroke": null
+    },
+    "axisX": {
+      "labelLimit": 0,
+      "labelFontSize": 11,
+      "titleFontSize": 11,
+      "grid": false,
+      "gridColor": "transparent",
+      "gridWidth": 0,
+      "domain": true,
+      "domainColor": "#121212",
+      "domainWidth": 1,
+      "ticks": false,
+      "tickColor": "transparent",
+      "tickWidth": 0,
+      "tickSize": 0,
+      "labelFont": "Helvetica, Arial, sans-serif",
+      "labelColor": "#6b6b6b",
+      "labelPadding": 2,
+      "titleFont": "Helvetica, Arial, sans-serif",
+      "titleColor": "#6b6b6b",
+      "titleFontWeight": "normal"
+    },
+    "axisY": {
+      "labelFontSize": 11,
+      "titleFontSize": 11,
+      "labelSeparation": 7,
+      "grid": false,
+      "gridColor": "transparent",
+      "gridWidth": 0,
+      "domain": false,
+      "domainColor": "transparent",
+      "domainWidth": 0,
+      "ticks": false,
+      "tickColor": "transparent",
+      "tickWidth": 0,
+      "tickSize": 0,
+      "labelFont": "Helvetica, Arial, sans-serif",
+      "labelColor": "#6b6b6b",
+      "labelPadding": 2,
+      "titleFont": "Helvetica, Arial, sans-serif",
+      "titleColor": "#6b6b6b",
+      "titleFontWeight": "normal",
+      "labels": false,
+      "labelLimit": 0,
+      "tickCount": 5
+    },
+    "legend": {
+      "labelFontSize": 10,
+      "titleFontSize": 11
+    },
+    "facet": {
+      "spacing": 32
+    },
+    "background": "#ffffff",
+    "font": "Helvetica, Arial, sans-serif",
+    "title": {
+      "font": "Georgia, serif",
+      "fontSize": 17.5,
+      "fontWeight": 700,
+      "color": "#121212",
+      "anchor": "start",
+      "orient": "top",
+      "offset": 16,
+      "subtitleFont": "Georgia, serif",
+      "subtitleFontSize": 13,
+      "subtitleColor": "#6b6b6b",
+      "subtitlePadding": 3,
+      "frame": "bounds"
+    },
+    "line": {
+      "strokeWidth": 2.4,
+      "strokeCap": "round",
+      "strokeJoin": "round"
+    },
+    "trail": {
+      "size": 2.4
+    },
+    "rule": {
+      "strokeCap": "round"
+    },
+    "point": {},
+    "circle": {
+      "size": 58
+    },
+    "square": {
+      "size": 58
+    },
+    "header": {
+      "labelFont": "Helvetica, Arial, sans-serif",
+      "labelFontSize": 11,
+      "labelColor": "#6b6b6b",
+      "labelFontWeight": "normal",
+      "title": null
+    }
+  },
+  "width": {
+    "step": 64
+  },
+  "title": {
+    "text": "Manhattan and Brooklyn Dominate Film Permits in NYC",
+    "subtitle": [
+      "Permits issued by MOME, total permits per borough"
+    ],
+    "fontSize": 14
+  },
+  "background": "#ffffff",
+  "padding": {
+    "left": 12,
+    "right": 12,
+    "top": 70,
+    "bottom": 12
+  },
+  "layer": [
+    {
+      "mark": {
+        "type": "bar",
+        "color": "#2f6b9a"
+      },
+      "encoding": {
+        "y": {
+          "field": "permit_count",
+          "type": "quantitative",
+          "title": "Number of Permits",
+          "scale": {
+            "zero": true
+          },
+          "axis": {
+            "format": ",.12~g",
+            "titleAngle": 0,
+            "titleAlign": "left",
+            "titleAnchor": "start",
+            "titleX": 0,
+            "titleY": -25,
+            "titlePadding": 0,
+            "titleBaseline": "bottom"
+          }
+        },
+        "x": {
+          "field": "borough",
+          "type": "nominal",
+          "sort": null,
+          "title": "Borough",
+          "axis": {
+            "title": null
+          },
+          "scale": {
+            "paddingInner": 0.28
+          }
+        }
+      }
+    },
+    {
+      "__themeSynthetic": true,
+      "mark": {
+        "type": "text",
+        "font": "Helvetica, Arial, sans-serif",
+        "fontSize": 11,
+        "fontWeight": 700,
+        "align": "center",
+        "baseline": "top",
+        "dy": 4,
+        "color": "#ffffff"
+      },
+      "encoding": {
+        "text": {
+          "field": "permit_count",
+          "type": "quantitative",
+          "format": ".3~s"
+        },
+        "x": {
+          "field": "borough",
+          "type": "nominal",
+          "sort": null,
+          "title": "Borough"
+        },
+        "y": {
+          "field": "permit_count",
+          "type": "quantitative",
+          "title": "Number of Permits"
+        }
+      },
+      "transform": [
+        {
+          "filter": "abs(datum[\"permit_count\"]) >= 1363.8396875"
+        }
+      ]
+    },
+    {
+      "__themeSynthetic": true,
+      "transform": [
+        {
+          "filter": "abs(datum[\"permit_count\"]) < 1363.8396875"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "font": "Helvetica, Arial, sans-serif",
+        "fontSize": 11,
+        "fontWeight": 700,
+        "align": "center",
+        "baseline": "bottom",
+        "dy": -4,
+        "color": "#121212"
+      },
+      "encoding": {
+        "text": {
+          "field": "permit_count",
+          "type": "quantitative",
+          "format": ".3~s"
+        },
+        "x": {
+          "field": "borough",
+          "type": "nominal",
+          "sort": null,
+          "title": "Borough"
+        },
+        "y": {
+          "field": "permit_count",
+          "type": "quantitative",
+          "title": "Number of Permits"
+        }
+      }
+    }
+  ],
+  "data": {
+    "values": [
+      {
+        "permit_count": 9467,
+        "borough": "Manhattan"
+      },
+      {
+        "borough": "Brooklyn",
+        "permit_count": 6137
+      },
+      {
+        "permit_count": 2406,
+        "borough": "Queens"
+      },
+      {
+        "permit_count": 515,
+        "borough": "Bronx"
+      },
+      {
+        "borough": "Staten Island",
+        "permit_count": 149
+      }
+    ]
+  }
+}
