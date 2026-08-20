@@ -285,7 +285,7 @@ curl https://ai-gateway.apps.cloud.rt.nyu.edu/v1/responses \
   -H "x-portkey-api-key: $PORTKEY_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
-     "model":"@vertexai/gemini-3.5-flash", 
+     "model":"@vertexai/gemini-3.7-flash", 
      "input": 
       [
         {"role": "system", "content": "You are a helpful assistant." }, 
@@ -300,7 +300,7 @@ curl https://ai-gateway.apps.cloud.rt.nyu.edu/v1/responses \
   Response (truncated)
 
 ```json 
-{"status":"completed", "model":"gemini-3.5-flash",
+{"status":"completed", "model":"gemini-3.7-flash",
 "output": [{
     "type":"message",
     "role":"assistant",
@@ -534,7 +534,7 @@ client = Portkey(
 )
 
 response = client.responses.create(
-    model="@vertexai/gemini-3.5-flash",
+    model="@vertexai/gemini-3.7-flash",
     input="Complete the following sentence: The sun is shining and the sky is",
 )
 
@@ -820,7 +820,7 @@ hideInToc: true
   Pass a prompt to the LLM with this tool:
   ```python
   response = portkey.responses.create(
-    model="@vertexai/gemini-3.5-flash",
+    model="@vertexai/gemini-7-flash",
     input=messages,
     tools=tools,
     )
@@ -882,7 +882,7 @@ hideInToc: true
   
   ```python
   Response(
-    model='gemini-3.5-flash', object='response',
+    model='gemini-3.7-flash', object='response',
     output=[
       ResponseOutputMessage(
         content=[
@@ -1029,9 +1029,20 @@ color: violet-light
 - Since this is a common pattern that occurs with LLMs in many scenarios, `Agent` frameworks were developed to handle this
 - With an agent, the workflow now becomes:
 
+<v-switch>
+
+  <template #1>
+
   ```mermaid {scale: 0.8}
   flowchart LR
     U[User] -->|Prompt with tools| A[Agent]
+  ```
+  </template>
+
+  <template #2>
+
+  ```mermaid {scale: 0.725}
+  flowchart LR
     A[Agent] -->|Request with tools| M[LLM]
     M -->|Response: tool call| A
     A -->|Tool Call and parameters| R[Tool call runner]
@@ -1040,9 +1051,18 @@ color: violet-light
     T -->|Result| R
     A -->|Request with result of tool calls| M
     M -->|Final response with no tool calls| A
-    A -->|Final response with no tool calls| U
-
   ```
+  </template>
+
+  <template #3>
+
+  ```mermaid {scale: 0.7}
+  flowchart LR
+    A[Agent] -->|Final response with no tool calls| U[User]
+  ```
+  </template>
+
+</v-switch>
 
 
 ---
@@ -1059,7 +1079,7 @@ hideInToc: true
 
 :: left ::
 
-### Synchronous flow
+### Synchronous Flow
 
 The program waits for the function to finish before moving on:
 
@@ -1080,7 +1100,7 @@ Results are available as soon as the function is run.
 
 :: right ::
 
-### Asynchronous flow
+### Asynchronous Flow
 
 An `async` function can do its work while the program handles other tasks:
 
@@ -1096,10 +1116,12 @@ result = await async_function(parameters)
 use(result)
 ```
 
-Asynchronous functions are scheduled to be run on an `event loop`. The main benefit is that the program can run other tasks while the asynchronous function runs in the background.
-
 For today, we will be using `await` to pause execution until the result is ready. With it, this call behaves synchronously from this point of view.
 
+  <AdmonitionType type="info" width="425px">
+
+  Asynchronous functions are scheduled to be run on an `event loop`. The main benefit is that the program can run other tasks while the asynchronous function runs in the background.
+  </AdmonitionType>
 
 ---
 layout: top-title
@@ -1121,7 +1143,7 @@ color: violet-light
   agent = Agent(
       name="agent-with-custom-tool",
       model=OpenAIResponsesModel(
-          model_name="@vertexai/gemini-3.5-flash",
+          model_name="@vertexai/gemini-3.7-flash",
           provider=OpenAIProvider(
               base_url="https://ai-gateway.apps.cloud.rt.nyu.edu/v1/",
               api_key=os.getenv("PORTKEY_API_KEY"),
@@ -1137,13 +1159,18 @@ color: violet-light
   </template>
 
   <template #2>
-  Execution becomes much simpler as the `agent` handles the tool call for us:
 
+  Execution becomes much simpler as the `agent` handles the tool call for us:
   <br/>
+    
+  <AdmonitionType type="tip" width="700px">
+
+  `await` is added because the agent runs asynchronously, but we want it to run to completion now!  
+  </AdmonitionType>
   <br/>
+
 
   ```python
-  # await is added because the agent is run asynchronously
   result = await agent.run( 
                            'Roll a 10 sided die and check if \
                             the dice roll was valid. \
@@ -1169,20 +1196,42 @@ Model Context Protocol is a standardized interface to provide a set of tools ins
 
 <br/>
 
+
+<v-switch>
+  <template #1>
+
   ```mermaid {scale: 0.8}
   flowchart LR
     U[User] -->|Prompt with MCP server addresses| A[Agent]
+  ```
+  </template>
+
+  <template #2>
+
+  ```mermaid {scale: 0.8}
+  flowchart LR
     A[Agent] -->|Request with tool call| M[LLM]
     M -->|Response: tool call| A
     A -->|Tool Call and parameters| C[MCP client]
     C -->|Tool Call result| A
     C -->|Execute Tool| S[MCP Server]
+    S -->|Tool call result| C
     A -->|Request with result of tool calls| M
     M -->|Final response with no tool calls| A
-    A -->|Final response with no tool calls| U
+    style S fill:#59B2D1,stroke:#333,stroke-width:4,font-size:16px
+
   ```
+  </template>
 
+  <template #3>
 
+  ```mermaid {scale: 0.8}
+  flowchart LR
+    A[Agent] -->|Final response with no tool calls| U[User]
+  ```
+  </template>
+
+</v-switch>
 
 ---
 layout: side-title
