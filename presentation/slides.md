@@ -1252,7 +1252,8 @@ Reach out to Research Technology Services, https://services.rt.nyu.edu/
 :: content ::
 
 We have learnt:
--  What LLMs are.
--  How they generate text.
+-  What LLMs are & how they generate text.
 -  How you can generate structured outputs from LLMs.
--  How NYU facilitates your access to AI resources.
+-  Why using an Agent framework is beneficial.
+-  How MCP can standardize what Agents can do.
+-  How NYU facilitates your access to AI resources!
