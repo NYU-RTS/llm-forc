@@ -417,6 +417,45 @@ align: rm-lm
 
 Head over to app.portkey.ai and choose the "Login with SSO" option with your NetID@nyu.edu email address.
 
+---
+layout: top-title-two-cols
+columns: is-6
+color: violet-light
+hideInToc: true
+---
+
+:: title ::
+
+# Running the example notebooks
+
+:: left :: 
+
+On your own laptop:
+<br/>
+
+- You can run the examples on your laptop once you setup a virtual environment, no code changes are necessary.
+
+- Download and use `uv` to launch the notebooks with:
+
+  ```bash
+  PORTKEY_API_KEY="..." uv run --with jupyter jupyter lab
+  ```
+
+:: right ::
+
+On JupyterHub:
+<br/>
+
+- We have setup a JupyterHub instance for this session and you can access it at https://forc-1-fall.rcnyu.org/hub/login
+
+- The necessary packages are already installed in the `forc` conda environment.
+
+- However, note the following changes to URLs:
+
+  https://ai-gateway.apps.cloud.rt.nyu.edu/ -> https://portkey-lb.rt.nyu.edu/prod/
+
+  https://mcp-gateway.apps.cloud.rt.nyu.edu/ -> https://portkey-lb.rt.nyu.edu/prod/mcp/
+
 
 ---
 layout: top-title-two-cols
