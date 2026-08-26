@@ -62,9 +62,6 @@ color: violet-light
 hideInToc: true
 ---
 
-
-[^ref1]: <div class="ns-c-cite">Adapted from Hands-On Large Language Models by Jay Alammar & Maarten Grootendorst.</div>
-
 :: title ::
 
 # Neural Networks
@@ -81,7 +78,13 @@ hideInToc: true
 :: right ::
 <img src="/neural_nets.png"/>
 
-Overview of neural networks[^ref1] 
+Overview of neural networks
+
+:: default ::
+
+<div class="ns-c-cite">
+Reference: <a href="https://www.oreilly.com/library/view/hands-on-large-language/9781098150969/">Hands-On Large Language Models</a>
+</div>
 
 
 ---
@@ -91,10 +94,6 @@ align: l-lt-lt
 color: violet-light
 ---
 
-[^ref1]: <div class="ns-c-cite"><a href="https://arxiv.org/abs/1706.03762">Attention Is All You Need</a></div>
-[^ref2]: <div class="ns-c-cite">Adapted from Hands-On Large Language Models by Jay Alammar & Maarten Grootendorst.</div>
-
-
 :: title ::
 
 # LLMs overview
@@ -103,7 +102,7 @@ color: violet-light
 
 - Within natural language, the meaning of a word depends on the context it occurs in, but older language models did not account for this. 
 
-- Recent advances in model architectures[^ref1] to account for it allowed language models to become better at a wider variety of tasks.
+- Recent advances in model architectures to account for it allowed language models to become better at a wider variety of tasks.
 
 - LLMs are neural networks which have billions of parameters!
 
@@ -111,7 +110,13 @@ color: violet-light
 :: right ::
 <img src="/llms_uses.png"/>
 
-Applications of LLMs[^ref2]
+Applications of LLMs
+
+:: default ::
+
+<div class="ns-c-cite">
+References: <a href="https://arxiv.org/abs/1706.03762">Attention Is All You Need</a>; <a href="https://www.oreilly.com/library/view/hands-on-large-language/9781098150969/">Hands-On Large Language Models</a>
+</div>
 
 
 ---
@@ -121,9 +126,6 @@ align: l-lt-lt
 color: violet-light
 hideInToc: true
 ---
-
-
-[^ref1]: [<div class="ns-c-cite">Tiktokenizer</div>](https://tiktokenizer.vercel.app/?model=gpt-4o)
 
 
 :: title ::
@@ -142,7 +144,11 @@ smaller than words.
 :: right ::
 <img src="/tiktoenizer.png"/>
 
-Interactive demo of tokenization, head to [this link](https://tiktokenizer.vercel.app/?model=gpt-4o) and try it out![^ref1] 
+:: default ::
+
+<div class="ns-c-cite">
+Reference: <a href="https://tiktokenizer.vercel.app/?model=gpt-4o">Tiktokenizer</a>
+</div>
 
 
 ---
@@ -153,8 +159,6 @@ color: violet-light
 hideInToc: true
 ---
 
-
-[^ref1]: <div class="ns-c-cite">Adapted from Hands-On Large Language Models by Jay Alammar & Maarten Grootendorst.</div>
 
 :: title ::
 
@@ -170,7 +174,13 @@ hideInToc: true
 :: right ::
 <img src="/one_token_at_a_time.png"/>
 
-LLMs generate output one token at a time[^ref1] 
+LLMs generate output one token at a time
+
+:: default ::
+
+<div class="ns-c-cite">
+Reference: <a href="https://www.oreilly.com/library/view/hands-on-large-language/9781098150969/">Hands-On Large Language Models</a>
+</div>
 
 
 ---
@@ -181,8 +191,6 @@ color: violet-light
 hideInToc: true
 ---
 
-
-[^ref1]: <div class="ns-c-cite">Adapted from Hands-On Large Language Models by Jay Alammar & Maarten Grootendorst.</div>
 
 :: title ::
 
@@ -198,7 +206,13 @@ hideInToc: true
 :: right ::
 <img src="/token_probs.png"/>
 
-LLMs generate output one token at a time[^ref1]
+Token sampling
+
+:: default ::
+
+<div class="ns-c-cite">
+Reference: <a href="https://www.oreilly.com/library/view/hands-on-large-language/9781098150969/">Hands-On Large Language Models</a>
+</div>
 
 ---
 layout: top-title-two-cols
@@ -207,8 +221,6 @@ align: l-lt-lt
 color: violet-light
 ---
 
-
-[^ref1]: <div class="ns-c-cite">Adapted from <a href="https://newsletter.maartengrootendorst.com/p/a-visual-guide-to-reasoning-llms">A Visual Guide to Reasoning LLMs by Maarten Grootendorst</a>.</div>
 
 :: title ::
 
@@ -224,7 +236,13 @@ color: violet-light
 :: right ::
 <img src="/reasoning_llms.png"/>
 
-Reasoning LLMs have been trained to imitate thought processes[^ref1]
+Reasoning LLMs have been trained to imitate thought processes
+
+:: default ::
+
+<div class="ns-c-cite">
+Reference: <a href="https://newsletter.maartengrootendorst.com/p/a-visual-guide-to-reasoning-llms">A Visual Guide to Reasoning LLMs</a>
+</div>
 
 
 ---

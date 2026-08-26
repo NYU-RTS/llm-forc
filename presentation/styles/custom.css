@@ -6,5 +6,6 @@
 }
 
 .ns-c-cite {
-  display: inline
+  display: block;
+  text-align: right;
 }
